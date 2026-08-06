@@ -11,7 +11,7 @@
 flowchart TB
 
 subgraph DM320[Drivers]
-    direction LR
+    direction TB
 
     DM1[Slew 1]
     DM2[Slew 2]
@@ -24,7 +24,7 @@ subgraph DM320[Drivers]
 end
 
 subgraph LLS[Logic Level Shifter]
-    direction LR
+    direction TB
 
     LLS1[Shifter 1]
     LLS2[Shifter 2]
@@ -33,7 +33,7 @@ subgraph LLS[Logic Level Shifter]
 end
 
 subgraph PICO[Raspberry Pi Pico 2]
-    direction LR
+    direction TB
 
     GPX1
     GPX2
@@ -54,11 +54,12 @@ subgraph PICO[Raspberry Pi Pico 2]
 end
 
 
-subgraph CCM[Crane Control Module]
-      PICO
-      LLS
-      DM320
-end
+%%subgraph CCM[Crane Control Module]
+%%    direction TB
+%%      PICO
+%%      LLS
+%%      DM320
+%%end
 
 
 %% LOGIC LEVEL SHIFTER (5V) TO MOTOR DRIVERS
@@ -131,7 +132,7 @@ subgraph I2C[I2C Bus]
 end
 
 subgraph PICO[Raspberry Pico 2]
-    direction LR
+    direction TB
 
     SDA[GPX]
     SCL[GPX]
@@ -141,7 +142,7 @@ end
 
 
 subgraph MPX[Multiplexer]
-    direction LR
+    direction TB
 
     MP_1[SDA]
     MP_2[SCL]
@@ -162,7 +163,7 @@ end
 
 
 subgraph ENC[Encoder]
-    direction LR
+    direction TB
 
     ENC1[Jib Over]
     ENC2[Boom]
@@ -266,13 +267,14 @@ subgraph IN[Input]
     end
 
     subgraph U_IN[UART]
-        direction LR
+        direction TB
 
         RXI[UART RX]
         TXI[UART TX]
     end
 
     subgraph SPI_I[SPI]
+        direction TB
         MISO
         MOSI
         SCLK
@@ -280,6 +282,7 @@ subgraph IN[Input]
     end
 
      subgraph I2C_OUT[I2C]
+        direction TB
         SDA
         SCL
     end
@@ -293,14 +296,14 @@ subgraph OUT[Output]
     end
 
     subgraph U_OUT[UART]
-        direction LR
+        direction TB
 
         RXO[UART RX]
         TXO[UART TX]
     end
 
     subgraph ST[PWM/Motion]
-    direction LR
+    direction TB
 
         PUL1
         DIR1
@@ -321,11 +324,13 @@ subgraph OUT[Output]
     end
 
     subgraph I2C_OUT[I2C]
+        direction TB
         SDA
         SCL
     end
 
     subgraph SPI_O[SPI]
+        direction TB
         MISO_O[MISO]
         MOSI_O[MOSI]
         SCLK_O[SCLK]
@@ -357,6 +362,7 @@ flowchart TB
 
 subgraph DP[CCM Power Wiring]
     direction TB
+    GND_C
     PSU
     DRIVER
     PICO
