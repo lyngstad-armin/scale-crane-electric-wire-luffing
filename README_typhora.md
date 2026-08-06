@@ -117,7 +117,7 @@ style LLS fill:#5c2525
 ## CCM Pico I2C BUS
 
 ```mermaid
-%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 100, 'rankSpacing': 50}}}%%
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
 
 flowchart TB
 
@@ -505,5 +505,3 @@ style MRU fill:#242b2b
 style SPI fill:#5c2525
 
 ```
-
-
