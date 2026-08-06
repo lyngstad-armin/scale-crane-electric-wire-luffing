@@ -1,16 +1,15 @@
 # Scale Crane
 
-## CCM Wiring
+## External Communication / I2C Bus / Driver Wiring
 
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
 flowchart LR
-
+classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
 subgraph Driver Wiring
     direction TD
-    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
-    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
-    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
 
     DM1[Slew 1]:::style3
     DM2[Slew 2]:::style3
@@ -69,7 +68,12 @@ GPX03 ---|DIR 3.3V| LLS3 ---|DIR 5V| DM6
 GPX05 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM7
 GPX07 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM8
 end
-
+```
+```mermaid
+flowchart LR
+classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
 subgraph I2C Multiplexer Wiring
     GP1[GPX SDA]:::style2
     GP2[GPX SCL]:::style2
@@ -105,13 +109,19 @@ SDA4 & SCL4 --- ENC4
 SDA3 & SCL3 --- ENC5
 MPXSD & MPXSC --- X991
 SP1[CCM PICO]:::style2 --- SP2[MULTIPLEXER]:::style1 --- SP3[ENCODERS]:::style3
-linkStyle 44,45,46,47 display:none
+linkStyle 12,13,14,15 display:none
 
 
 
 
 end
+```
 
+```mermaid
+flowchart LR
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff  
 subgraph External Connections
 URX0[UART RX]:::style1
 UTX0[UART TX]:::style1
@@ -141,7 +151,7 @@ FFG2["CCM PICO"]:::style2 --- FFG3[SPI ANTENNA]:::style3
 URX0 --- URX1 --- X192
 UTX0 --- UTX1 --- X192
 FFG1["MRU PICO"]:::style1 --- FFG2
-linkStyle 48,50,52,53 display:none
+linkStyle 0,2,4,5 display:none
 GN0 --- GN1 --- GN2
 V0 --- V1 --- V2
 MOSI0 --- MISO1
@@ -152,4 +162,95 @@ SCK0 --- SCK1
 end
 ```
 
+## Absolute CCM Pico I/O Wiring
+```mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart TB
 
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
+
+subgraph Absolute I/O
+
+    CCM[CCM PICO]:::style1
+    INPUT[Input]:::style3
+    OUTPUT[Output]:::style2
+
+    X290[" "]
+    style X290 display:none
+
+    USB["USB"]:::style1
+    GP0:::style1
+    GP1:::style1
+    GP2:::style1
+    GP3:::style1
+    GP4:::style1
+    GP5:::style1
+    GP6:::style1
+    GP7:::style1
+    GP8:::style1
+    GP9:::style1
+    GP10:::style1
+    GP11:::style1
+    GP12:::style1
+    GP13:::style1
+    GP14:::style1
+    GP15:::style1
+    GP16:::style1
+    GP17:::style1
+    GP18:::style1
+    GP19:::style1
+    GP20:::style1
+    GP21:::style1
+    GP22:::style1
+    GP26:::style1
+    GP27:::style1
+    GP28:::style1
+
+    USBI[USB]:::style3
+
+    TX[UART TX]:::style3
+    RX[UART RX]:::style3
+
+    MISO:::style3
+    MOSI:::style3
+    SCK:::style3
+    CS:::style3
+    
+    TXU[UART TX]:::style2
+    RXU[UART TX]:::style2
+
+    MOSIU[MOSI]:::style2
+    MISOU[MISO]:::style2
+    SCKU[SCK]:::style2
+    CSU[CS]:::style2
+
+    PUL1:::style2
+    PUL2:::style2
+    PUL3:::style2
+    PUL4:::style2
+    PUL5:::style2
+    PUL6:::style2
+    PUL7:::style2
+    PUL8:::style2
+
+    DIR1:::style2
+    DIR2:::style2
+    DIR3:::style2
+    DIR4:::style2
+    DIR5:::style2
+    DIR6:::style2
+    DIR7:::style2
+    DIR8:::style2
+
+INPUT --- CCM --- OUTPUT
+linkStyle 0,1 display:none
+USBI --- USB --- X290
+linkStyle 3 display:none
+TX --- GP0 --- TXU
+RX --- GP1 --- RXU
+
+    
+end
+```
