@@ -10,106 +10,67 @@
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
 flowchart TB
 
-subgraph DM320[Drivers]
-    direction TB
+    classDef pico fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef shifter fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef driver fill:#242b2b,stroke:#5b9bd5,color:#fff
 
-    DM1[Slew 1]
-    DM2[Slew 2]
-    DM3[Boom]
-    DM4[Jib Under]
-    DM5[Jib Over]
-    DM6[Hoist]
-    DM7[Comp 1]
-    DM8[Comp 2]
-end
+    DM1[Slew 1]:::driver
+    DM2[Slew 2]:::driver
+    DM3[Boom]:::driver
+    DM4[Jib Under]:::driver
+    DM5[Jib Over]:::driver
+    DM6[Hoist]:::driver
+    DM7[Comp 1]:::driver
+    DM8[Comp 2]:::driver
 
-subgraph LLS[Logic Level Shifter]
-    direction TB
+    LLS1[Shifter 1]:::shifter
+    LLS2[Shifter 2]:::shifter
+    LLS3[Shifter 3]:::shifter
+    LLS4[Shifter 4]:::shifter
 
-    LLS1[Shifter 1]
-    LLS2[Shifter 2]
-    LLS3[Shifter 3]
-    LLS4[Shifter 4]
-end
+    GPX1:::pico
+    GPX2:::pico
+    GPX3:::pico
+    GPX4:::pico
+    GPX5:::pico
+    GPX6:::pico
+    GPX7:::pico
+    GPX8:::pico
+    GPX01:::pico
+    GPX02:::pico
+    GPX03:::pico
+    GPX04:::pico
+    GPX05:::pico
+    GPX06:::pico
+    GPX07:::pico
+    GPX08:::pico
 
-subgraph PICO[Raspberry Pi Pico 2]
-    direction TB
+%%linkStyle 0,1 display:none
+GPX2 ---|PUL 3.3V| LLS1 ---|PUL 5V| DM1
+GPX4 ---|PUL 3.3V| LLS1 ---|PUL 5V| DM2
 
-    GPX1
-    GPX2
-    GPX3
-    GPX4
-    GPX5
-    GPX6
-    GPX7
-    GPX8
-    GPX01
-    GPX02
-    GPX03
-    GPX04
-    GPX05
-    GPX06
-    GPX07
-    GPX08
-end
+GPX6 ---|PUL 3.3V| LLS2 ---|PUL 5V| DM3
+GPX8 ---|PUL 3.3V| LLS2 ---|PUL 5V| DM4
 
+GPX02 ---|PUL 3.3V| LLS3 ---|PUL 5V| DM5
+GPX04 ---|PUL 3.3V| LLS3 ---|PUL 5V| DM6
 
-%%subgraph CCM[Crane Control Module]
-%%    direction TB
-%%      PICO
-%%      LLS
-%%      DM320
-%%end
+GPX06 ---|PUL 3.3V| LLS4 ---|PUL 5V| DM7
+GPX08 ---|PUL 3.3V| LLS4 ---|PUL 5V| DM8
 
 
-%% LOGIC LEVEL SHIFTER (5V) TO MOTOR DRIVERS
-LLS1 ---|PUL 5V| DM1 & DM2
-LLS2 ---|PUL 5V| DM3 & DM4
-LLS3 ---|PUL 5V| DM5 & DM6
-LLS4 ---|PUL 5V| DM7 & DM8
+GPX1 ---|DIR 3.3V| LLS1 ---|DIR 5V| DM1
+GPX3 ---|DIR 3.3V| LLS1 ---|DIR 5V| DM2
 
-LLS1 ---|DIR 5V| DM1 & DM2
-LLS2 ---|DIR 5V| DM3 & DM4
-LLS3 ---|DIR 5V| DM5 & DM6
-LLS4 ---|DIR 5V| DM7 & DM8
+GPX5 ---|DIR 3.3V| LLS2 ---|DIR 5V| DM3
+GPX7 ---|DIR 3.3V| LLS2 ---|DIR 5V| DM4
 
+GPX01 ---|DIR 3.3V| LLS3 ---|DIR 5V| DM5
+GPX03 ---|DIR 3.3V| LLS3 ---|DIR 5V| DM6
 
-%% PICO TO LOGIC LEVEL SHIFTER
-GPX1 ---|PUL 3.3V| LLS1
-GPX2 ---|DIR 3.3V| LLS1
+GPX05 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM7
+GPX07 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM8
 
-GPX3 ---|PUL 3.3V| LLS1
-GPX4 ---|PUL 3.3V| LLS1
-
-
-GPX5 ---|PUL 3.3V| LLS2
-GPX6 ---|DIR 3.3V| LLS2
-
-
-GPX7 ---|PUL 3.3V| LLS2
-GPX8 ---|DIR 3.3V| LLS2
-
-
-GPX01 ---|PUL 3.3V| LLS3
-GPX02 ---|DIR 3.3V| LLS3
-
-GPX03 ---|PUL 3.3V| LLS3
-GPX04 ---|DIR 3.3V| LLS3
-
-
-GPX05 ---|PUL 3.3V| LLS4
-GPX06 ---|DIR 3.3V| LLS4
-
-GPX07 ---|PUL 3.3V| LLS4
-GPX08 ---|DIR 3.3V| LLS4
-
-
-
-
-%% STYLE FILL
-style PICO fill:#2e3c50
-style DM320 fill:#242b2b
-style LLS fill:#5c2525
 ```
 
 ---

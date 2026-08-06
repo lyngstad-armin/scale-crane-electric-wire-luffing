@@ -1,363 +1,155 @@
-# scale-crane-electric-wire-luffing
+# Scale Crane
 
-
-
----
-
-## CCM Motor Driver Logic
+## CCM Wiring
 
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
-flowchart TB
+flowchart LR
 
-subgraph DM320[Drivers]
-    direction LR
+subgraph Driver Wiring
+    direction TD
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
 
-    DM1[Slew 1]
-    DM2[Slew 2]
-    DM3[Boom]
-    DM4[Jib Under]
-    DM5[Jib Over]
-    DM6[Hoist]
-    DM7[Comp 1]
-    DM8[Comp 2]
+    DM1[Slew 1]:::style3
+    DM2[Slew 2]:::style3
+    DM3[Boom]:::style3
+    DM4[Jib Under]:::style3
+    DM5[Jib Over]:::style3
+    DM6[Hoist]:::style3
+    DM7[Comp 1]:::style3
+    DM8[Comp 2]:::style3
+
+    LLS1[Shifter 1]:::style1
+    LLS2[Shifter 2]:::style1
+    LLS3[Shifter 3]:::style1
+    LLS4[Shifter 4]:::style1
+
+    GPX1:::style2
+    GPX2:::style2
+    GPX3:::style2
+    GPX4:::style2
+    GPX5:::style2
+    GPX6:::style2
+    GPX7:::style2
+    GPX8:::style2
+    GPX01:::style2
+    GPX02:::style2
+    GPX03:::style2
+    GPX04:::style2
+    GPX05:::style2
+    GPX06:::style2
+    GPX07:::style2
+    GPX08:::style2
+
+%%linkStyle 0,1 display:none
+GPX2 ---|PUL 3.3V| LLS1 ---|PUL 5V| DM1
+GPX4 ---|PUL 3.3V| LLS1 ---|PUL 5V| DM2
+
+GPX6 ---|PUL 3.3V| LLS2 ---|PUL 5V| DM3
+GPX8 ---|PUL 3.3V| LLS2 ---|PUL 5V| DM4
+
+GPX02 ---|PUL 3.3V| LLS3 ---|PUL 5V| DM5
+GPX04 ---|PUL 3.3V| LLS3 ---|PUL 5V| DM6
+
+GPX06 ---|PUL 3.3V| LLS4 ---|PUL 5V| DM7
+GPX08 ---|PUL 3.3V| LLS4 ---|PUL 5V| DM8
+
+
+GPX1 ---|DIR 3.3V| LLS1 ---|DIR 5V| DM1
+GPX3 ---|DIR 3.3V| LLS1 ---|DIR 5V| DM2
+
+GPX5 ---|DIR 3.3V| LLS2 ---|DIR 5V| DM3
+GPX7 ---|DIR 3.3V| LLS2 ---|DIR 5V| DM4
+
+GPX01 ---|DIR 3.3V| LLS3 ---|DIR 5V| DM5
+GPX03 ---|DIR 3.3V| LLS3 ---|DIR 5V| DM6
+
+GPX05 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM7
+GPX07 ---|DIR 3.3V| LLS4 ---|DIR 5V| DM8
 end
 
-subgraph LLS[Logic Level Shifter]
-    direction LR
+subgraph I2C Multiplexer Wiring
+    GP1[GPX SDA]:::style2
+    GP2[GPX SCL]:::style2
 
-    LLS1[Shifter 1]
-    LLS2[Shifter 2]
-    LLS3[Shifter 3]
-    LLS4[Shifter 4]
-end
+    MPXSD[SDA]:::style1
+    MPXSC[SCL]:::style1
+    SDA7:::style1
+    SCL7:::style1
+    SDA6:::style1
+    SCL6:::style1
+    SDA5:::style1
+    SCL5:::style1
+    SDA4:::style1
+    SCL4:::style1
+    SDA3:::style1
+    SCL3:::style1
 
-subgraph PICO[Raspberry Pi Pico 2]
-    direction LR
+    ENC1[Jib Over]:::style3
+    ENC2[Boom]:::style3
+    ENC3[Jib Under]:::style3
+    ENC4[Hoist]:::style3
+    ENC5[Winch]:::style3
 
-    GPX1
-    GPX2
-    GPX3
-    GPX4
-    GPX5
-    GPX6
-    GPX7
-    GPX8
-    GPX01
-    GPX02
-    GPX03
-    GPX04
-    GPX05
-    GPX06
-    GPX07
-    GPX08
-end
+    X991[" "]
+    style X991 display:none
 
-
-subgraph CCM[Crane Control Module]
-      PICO
-      LLS
-      DM320
-end
-
-
-%% LOGIC LEVEL SHIFTER (5V) TO MOTOR DRIVERS
-LLS1 ---|PUL 5V| DM1 & DM2
-LLS2 ---|PUL 5V| DM3 & DM4
-LLS3 ---|PUL 5V| DM5 & DM6
-LLS4 ---|PUL 5V| DM7 & DM8
-
-LLS1 ---|DIR 5V| DM1 & DM2
-LLS2 ---|DIR 5V| DM3 & DM4
-LLS3 ---|DIR 5V| DM5 & DM6
-LLS4 ---|DIR 5V| DM7 & DM8
-
-
-%% PICO TO LOGIC LEVEL SHIFTER
-GPX1 ---|PUL 3.3V| LLS1
-GPX2 ---|DIR 3.3V| LLS1
-
-GPX3 ---|PUL 3.3V| LLS1
-GPX4 ---|PUL 3.3V| LLS1
-
-
-GPX5 ---|PUL 3.3V| LLS2
-GPX6 ---|DIR 3.3V| LLS2
-
-
-GPX7 ---|PUL 3.3V| LLS2
-GPX8 ---|DIR 3.3V| LLS2
-
-
-GPX01 ---|PUL 3.3V| LLS3
-GPX02 ---|DIR 3.3V| LLS3
-
-GPX03 ---|PUL 3.3V| LLS3
-GPX04 ---|DIR 3.3V| LLS3
-
-
-GPX05 ---|PUL 3.3V| LLS4
-GPX06 ---|DIR 3.3V| LLS4
-
-GPX07 ---|PUL 3.3V| LLS4
-GPX08 ---|DIR 3.3V| LLS4
-
-
-
-
-%% STYLE FILL
-style PICO fill:#2e3c50
-style DM320 fill:#242b2b
-style LLS fill:#5c2525
-```
-
----
-
-## CCM Pico I2C BUS
-
-```mermaid
-%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 100, 'rankSpacing': 50}}}%%
-
-flowchart TB
-
-
-
-subgraph I2C[I2C Bus]
-    direction TB
-
-    PICO
-    MPX
-    ENC
-end
-
-subgraph PICO[Raspberry Pico 2]
-    direction LR
-
-    SDA[GPX]
-    SCL[GPX]
-    %%V[3.3V]
-    %%GND
-end
-
-
-subgraph MPX[Multiplexer]
-    direction LR
-
-    MP_1[SDA]
-    MP_2[SCL]
-    %%V1[3.3V]
-    %%GND1[GND]
-    SDA7
-    SCL7
-    SDA6
-    SCL6
-    SDA5
-    SCL5
-    SDA4
-    SCL4
-    SDA3
-    SCL3
-
-end
-
-
-subgraph ENC[Encoder]
-    direction LR
-
-    ENC1[Jib Over]
-    ENC2[Boom]
-    ENC3[Jib Under]
-    ENC4[Hoist]
-    ENC5[Comp]
-end
-
-
-
-%% FORMATTING
-    %%MT1[" "]
-    %%MT2[" "]
-    %%style MT1 display:none,stroke:none
-    %%style MT2 display:none,stroke:none
-
-    %%PICO --- MT1 --- MPX --- MT2 --- ENC
-    %%linkStyle 0,1,2,3 display:none
-
-%% PICO TO MULTIPLEXER
-SDA --- MP_1
-SCL --- MP_2
-%%V --- V1
-%%GND --- GND1
-
-
-%% MULTIPLEXER TO ENCODERS
+GP1 --- MPXSD
+GP2 --- MPXSC
 SDA7 & SCL7 --- ENC1
 SDA6 & SCL6 --- ENC2
 SDA5 & SCL5 --- ENC3
 SDA4 & SCL4 --- ENC4
 SDA3 & SCL3 --- ENC5
+MPXSD & MPXSC --- X991
+SP1[CCM PICO]:::style2 --- SP2[MULTIPLEXER]:::style1 --- SP3[ENCODERS]:::style3
+linkStyle 44,45,46,47 display:none
 
-%% Power to all enc
-    %%V1 --- ENC1 & ENC2 & ENC3 & ENC4 & ENC5
-    %%GND1 --- ENC1 & ENC2 & ENC3 & ENC4 & ENC5
 
 
-%% STYLE FILL
-style PICO fill:#2e3c50
-style ENC fill:#242b2b
-style MPX fill:#5c2525
-```
-
----
-
-## CCM Pico Complete I/O
-
-```mermaid
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-flowchart TB
-
-subgraph IO[Complete I/O]
-    direction TB
-
-    IN
-    PICO
-    OUT
-end
-
-subgraph PICO[Raspberry Pi Pico 2]
-    direction TB
-
-    USB
-    GP1
-    GP2
-    GP3
-    GP4
-    GP5
-    GP6
-    GP7
-    GP8
-    GP9
-    GP10
-    GP11
-    GP12
-    GP13
-    GP14
-    GP15
-    GP16
-    GP17
-    GP18
-    GP19
-    GP20
-    GP21
-    GP22
-    GP26
-    GP27
-    GP28
-    GND
-    VBUS
-    VSYS
-    V33[3.3V]
-end
-
-subgraph IN[Input]
-    direction TB
-
-    subgraph USB_I[USB]
-        USB0[USB]
-    end
-
-    subgraph U_IN[UART]
-        direction LR
-
-        RXI[UART RX]
-        TXI[UART TX]
-    end
-
-    subgraph SPI_I[SPI]
-        MISO
-        MOSI
-        SCLK
-        CS
-    end
-
-     subgraph I2C_OUT[I2C]
-        SDA
-        SCL
-    end
-end
-
-subgraph OUT[Output]
-    direction TB
-
-    subgraph USB_OUT[USB]
-        USB1[USB]
-    end
-
-    subgraph U_OUT[UART]
-        direction LR
-
-        RXO[UART RX]
-        TXO[UART TX]
-    end
-
-    subgraph ST[PWM/Motion]
-    direction LR
-
-        PUL1
-        DIR1
-        PUL2
-        DIR2
-        PUL3
-        DIR3
-        PUL4
-        DIR4
-        PUL5
-        DIR5
-        PUL6
-        DIR6
-        PUL7
-        DIR7
-        PUL8
-        DIR8
-    end
-
-    subgraph I2C_OUT[I2C]
-        SDA
-        SCL
-    end
-
-    subgraph SPI_O[SPI]
-        MISO_O[MISO]
-        MOSI_O[MOSI]
-        SCLK_O[SCLK]
-        CS_O[CS]
-    end
 
 end
 
-%% Connect
-IN --- PICO --- OUT
-linkStyle 0,1 display:none
+subgraph External Connections
+URX0[UART RX]:::style1
+UTX0[UART TX]:::style1
+GN0[GND]:::style1
+V0[3.3V]:::style1
 
+URX1[UART RX]:::style2
+UTX1[UART TX]:::style2
+GN1[GND]:::style2
+V1[3.3V]:::style2
+MISO0[MISO]:::style2
+MOSI0[MOSI]:::style2
+SCK0[SCK]:::style2
+CS0[CS]:::style2
 
+X192[" "]
+style X192 display:none
 
-%% Style
-style PICO fill:#2e3c50
-style IN fill:#242b2b
-style OUT fill:#5c2525
-```
+GN2[GND]:::style3
+V2[3.3V]:::style3
+MOSI1[MOSI]:::style3
+MISO1[MISO]:::style3
+SCK1[SCK]:::style3
+CS1[CS]:::style3
 
----
+FFG2["CCM PICO"]:::style2 --- FFG3[SPI ANTENNA]:::style3
+URX0 --- URX1 --- X192
+UTX0 --- UTX1 --- X192
+FFG1["MRU PICO"]:::style1 --- FFG2
+linkStyle 48,50,52,53 display:none
+GN0 --- GN1 --- GN2
+V0 --- V1 --- V2
+MOSI0 --- MISO1
+MISO0 --- MOSI1
+CS0 --- CS1
+SCK0 --- SCK1
 
-## CCM Power Wiring
-
-```mermaid
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-flowchart TB
-
-subgraph CCM[CCM Power Wiring]
 end
 ```
 
----
 
-## Something New
