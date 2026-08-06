@@ -119,7 +119,7 @@ style LLS fill:#5c2525
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
 
-flowchart TB
+flowchart LR
 
 
 
@@ -172,7 +172,8 @@ subgraph ENC[Encoder]
     ENC5[Comp]
 end
 
-
+PICO --- MPX --- ENC
+linkStyle 0,1 display:none
 
 %% FORMATTING
     %%MT1[" "]
@@ -188,7 +189,6 @@ SDA --- MP_1
 SCL --- MP_2
 %%V --- V1
 %%GND --- GND1
-
 
 %% MULTIPLEXER TO ENCODERS
 SDA7 & SCL7 --- ENC1
