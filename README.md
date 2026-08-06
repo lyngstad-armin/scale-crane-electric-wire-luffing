@@ -107,7 +107,7 @@ GPX08 ---|DIR 3.3V| LLS4
 
 %% STYLE FILL
 style PICO fill:#2e3c50
-style DM320 fill:#242b
+style DM320 fill:#242b2b
 style LLS fill:#5c2525
 ```
 
@@ -203,7 +203,7 @@ SDA3 & SCL3 --- ENC5
 
 %% STYLE FILL
 style PICO fill:#2e3c50
-style ENC fill:#242b
+style ENC fill:#242b2b
 style MPX fill:#5c2525
 ```
 
@@ -255,7 +255,7 @@ subgraph PICO[Raspberry Pi Pico 2]
     GND
     VBUS
     VSYS
-    3.3V
+    V33[3.3V]
 end
 
 subgraph IN[Input]
@@ -301,7 +301,7 @@ subgraph OUT[Output]
 
     subgraph ST[PWM/Motion]
     direction LR
- 
+
         PUL1
         DIR1
         PUL2
@@ -342,7 +342,7 @@ linkStyle 0,1 display:none
 
 %% Style
 style PICO fill:#2e3c50
-style IN fill:#242b
+style IN fill:#242b2b
 style OUT fill:#5c2525
 ```
 
@@ -354,13 +354,10 @@ style OUT fill:#5c2525
 %%{init: {'flowchart': {'curve': 'linear'}}}%%
 flowchart TB
 
-subgraph
-    george
+subgraph CCM[CCM Power Wiring]
 end
 ```
 
 ---
 
 ## Something New
-
-
