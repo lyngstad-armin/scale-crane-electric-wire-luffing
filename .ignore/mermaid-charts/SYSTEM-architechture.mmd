@@ -1,0 +1,38 @@
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart TB
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
+
+
+subgraph Remote
+end
+
+subgraph Crane
+ direction LR
+    CCM
+    MRU
+    SERVER
+end
+
+subgraph Website
+end
+
+subgraph Platform
+end
+
+
+CCM <--->|UART| MRU <--->|UART| SERVER
+
+Remote <--->|SPI| CCM
+SERVER --->|Websocket| Website
+Website --->|Websocket| Platform
+
+%%style
+Remote:::style3
+Crane:::default
+CCM:::style1
+MRU:::style2
+SERVER:::style2
+Website:::style1
+Platform:::style1

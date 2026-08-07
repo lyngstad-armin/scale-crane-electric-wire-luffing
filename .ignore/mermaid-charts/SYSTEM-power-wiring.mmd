@@ -1,0 +1,21 @@
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart TB
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
+
+subgraph PSU
+    GND
+    12V:::style1
+    5V:::style1
+end
+PSU:::style3
+CCM:::style3
+MRU:::style3
+SERVER:::style3
+
+PLATFORM:::style2
+
+GND & 12V & 5V --- CCM
+5V --- PLATFORM
+CCM --- MRU --- SERVER

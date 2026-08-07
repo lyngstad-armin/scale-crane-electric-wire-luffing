@@ -281,7 +281,7 @@ PG[Pico GND]:::style3
 PSU ---> 12V --- Driver --- P5
 GND --- LSH ---|LV| P3
 linkStyle 3 display:none
-GND --- PG & Driver
+GND --- Driver
 PG --- LSH ---|HV| P5
 
 PSU ---> GND
