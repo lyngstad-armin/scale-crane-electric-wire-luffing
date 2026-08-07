@@ -1,7 +1,5 @@
-# System Architechure and intermodular wiring schematic
-
-
-
+# System Architechure &<br>Intermodular Wiring Schematic
+[Back](../README.md)
 ## Intermodular Connections
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear'}}}%%

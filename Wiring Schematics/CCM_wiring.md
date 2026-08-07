@@ -1,5 +1,5 @@
-# CCM Wiring Diagrams
-
+# Crane Control Module<br>Wiring Diagrams
+[Back](../README.md)
 ## External Communication / I2C Bus / Driver Wiring
 
 ```mermaid
@@ -162,6 +162,36 @@ SCK0 --- SCK1
 
 end
 ```
+## Power Wiring CCM
+
+```mermaid
+%%{init: {'flowchart': {'curve': 'linear'}}}%%
+flowchart TB
+
+    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
+    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
+    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
+
+subgraph Power Wiring
+PSU:::style3
+GND:::style3
+12V:::style1
+Driver:::style2
+P5[Pico VBUS / 5V]:::style1
+P3[Pico 3.3V]:::style1
+LSH[Shifter]:::style2
+PG[Pico GND]:::style3 
+
+
+PSU ---> 12V --- Driver --- P5
+GND --- LSH ---|LV| P3
+linkStyle 3 display:none
+GND --- Driver
+PG --- LSH ---|HV| P5
+
+PSU ---> GND
+end
+```
 
 ## Absolute CCM Pico I/O Wiring
 
@@ -254,36 +284,5 @@ TX --- GP0 --- TXU
 RX --- GP1 --- RXU
 
 
-end
-```
-
-## Power Wiring CCM
-
-```mermaid
-%%{init: {'flowchart': {'curve': 'linear'}}}%%
-flowchart TB
-
-    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
-    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
-    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff
-
-subgraph Power Wiring
-PSU:::style3
-GND:::style3
-12V:::style1
-Driver:::style2
-P5[Pico VBUS / 5V]:::style1
-P3[Pico 3.3V]:::style1
-LSH[Shifter]:::style2
-PG[Pico GND]:::style3 
-
-
-PSU ---> 12V --- Driver --- P5
-GND --- LSH ---|LV| P3
-linkStyle 3 display:none
-GND --- Driver
-PG --- LSH ---|HV| P5
-
-PSU ---> GND
 end
 ```
