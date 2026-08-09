@@ -39,3 +39,4 @@ Designed, Built, Developed & Authored by
 & <br>
 **Jonas Hannisdal**,
 
+# ***Please note that the documentation is a WIP and will be updated regularly to provide necessary information to safely operate and service the product***
