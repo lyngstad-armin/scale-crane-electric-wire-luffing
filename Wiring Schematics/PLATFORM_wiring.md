@@ -305,10 +305,10 @@ end
 
 
 
-GND ---|To all BOB| D1 & D4 %%0,1
-12V ---|To all BOB| D1 & D4 %%2,3
-D3 & D6 ---|To all BOB| VBUS %%4,5
-GND --- GN %%6
+GND ---|To all BOB| D1 & D4
+12V ---|To all BOB| D1 & D4
+D3 & D6 ---|To all BOB| VBUS
+GND --- GN
 
 linkStyle 0,1,6 stroke:#2A2A2A,stroke-width:5px
 linkStyle 2,3,4,5 stroke:#FF4D4D,stroke-width:4px
