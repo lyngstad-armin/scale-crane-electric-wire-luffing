@@ -1,0 +1,102 @@
+%%{init: { 'flowchart': { 'nodeSpacing': 30, 'rankSpacing': 100, 'curve': 'linear' } } }%%
+flowchart LR
+classDef navy fill:#2e3c50,stroke:#5b9bd5,color:#fff
+classDef crimson fill:#5c2525,stroke:#5b9bd5,color:#fff
+classDef forest fill:#1f3d2b,stroke:#5b9bd5,color:#fff
+classDef plum fill:#3b2e50,stroke:#5b9bd5,color:#fff
+classDef teal fill:#1f3d3d,stroke:#5b9bd5,color:#fff
+classDef amber fill:#5a3a1a,stroke:#5b9bd5,color:#fff
+classDef magenta fill:#4a1f3d,stroke:#5b9bd5,color:#fff
+classDef olive fill:#4a4a1f,stroke:#5b9bd5,color:#fff
+classDef slate fill:#33383f,stroke:#5b9bd5,color:#fff
+classDef indigo fill:#2a2a5c,stroke:#5b9bd5,color:#fff
+classDef maroon fill:#4a1f2e,stroke:#5b9bd5,color:#fff
+classDef umber fill:#3d2b1f,stroke:#5b9bd5,color:#fff
+classDef steel fill:#1f3a4a,stroke:#5b9bd5,color:#fff
+classDef mustard fill:#4a3f1f,stroke:#5b9bd5,color:#fff
+
+D1[Driver 1<br> BOB]
+D2[Driver 2<br> BOB]
+D3[Driver 3<br> BOB]
+D4[Driver 4<br> BOB]
+D5[Driver 5<br> BOB]
+D6[Driver 6<br> BOB]
+
+subgraph RBPI[Raspberry Pi Pico W]
+    GPX1
+    GPX2
+    GPX3
+    GPX4
+    GPX5
+    GPX6
+    GPX7
+    GPX8
+    GPX9
+    GPX10
+    GPX11
+    GPX12
+end
+
+GPX1 --- GPX7
+GPX2 --- GPX8
+GPX3 --- GPX9
+GPX4 --- GPX10
+GPX5 --- GPX11
+GPX6 --- GPX12
+linkStyle 0,1,2,3,4,5 display:none
+
+D1 ---|PUL| GPX1
+D1 ---|DIR| GPX2
+
+D2 ---|PUL| GPX3
+D2 ---|DIR| GPX4
+
+D3 ---|PUL| GPX5
+D3 ---|DIR| GPX6
+
+GPX7 ---|PUL| D4
+GPX8 ---|DIR| D4
+
+
+GPX9 ---|PUL| D5
+GPX10 ---|DIR| D5
+
+
+GPX11 ---|PUL| D6
+GPX12 ---|DIR| D6
+
+
+%%Style
+D1:::teal
+D2:::teal
+D3:::teal
+D4:::teal
+D5:::teal
+D6:::teal
+RBPI:::forest
+GPX1:::plum
+GPX2:::maroon
+GPX3:::plum
+GPX4:::maroon
+GPX5:::plum
+GPX6:::maroon
+GPX7:::plum
+GPX8:::maroon
+GPX9:::plum
+GPX10:::maroon
+GPX11:::plum
+GPX12:::maroon
+
+%%Name
+GPX1["GP"]
+GPX2["GP"]
+GPX3["GP"]
+GPX4["GP"]
+GPX5["GP"]
+GPX6["GP"]
+GPX7["GP"]
+GPX8["GP"]
+GPX9["GP"]
+GPX10["GP"]
+GPX11["GP"]
+GPX12["GP"]
