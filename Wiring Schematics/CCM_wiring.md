@@ -187,7 +187,8 @@ PSU ---> 12V --- Driver --- P5
 GND --- LSH ---|LV| P3
 linkStyle 3 display:none
 GND --- Driver
-PG --- LSH ---|HV| P5
+PG ---|HV-side| LSH ---|HV| P5
+LSH ---|LV-Side| PG
 
 PSU ---> GND
 end
