@@ -28,8 +28,9 @@
     - [Memory](./Software%20Documentation/Stewart%20Platform/memory.py)
 - Server / Digital Twin
 - Future Work
+  - Smooth Travel Trajectory Planning [(Watch Video)](https://youtube.com/shorts/e3hcZ3Ub7m0?feature=share) <br>Contact **Armin Lyngstad** for quote on implementation
 
-According to agreement, the physical model of the crane & motion platform, in addition to necessary electronics and access to software, has been purchased by HVL ( WNUoAS).
+According to agreement, the physical model of the crane & motion platform, in addition to necessary electronics and access to software, has been purchased by HVL (WNUoAS).
 
 The associated IP, however, belongs to Palfinger Marine Norway AS, and shall be treated as such.
 HVL retains no right to modify / manufacture / develop this concept further.
