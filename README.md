@@ -5,7 +5,7 @@
   - [Usage](./User%20Manual/usage.md)
   - [Rigging Guide](./User%20Manual/rigging-guide.md)
   - [Limitations](./User%20Manual/limitations.md)
-- CAD Files
+- [CAD Files](./CAD/CAD_catalogue.md)
 - [Assembly Guide & BOM](./Assembly%20Guide/ASSEMBLY.md)
 - [Wiring Schematics](./Wiring%20Schematics/)
   - [System](./Wiring%20Schematics/SYSTEM_wiring.md)
