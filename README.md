@@ -14,18 +14,12 @@
   - [Crane Control Module](./Wiring%20Schematics/CCM_wiring.md)
 
   - [Stewart Platform](./Wiring%20Schematics/PLATFORM_wiring.md)
-- [On-board Software Documentation](./Software%20Documentation/)
-  - [Crane Control Module](./Software%20Documentation/CCM.py)
-
-  - [MRU](./Software%20Documentation/MRU.py)
-  - [Server](./Software%20Documentation/SERVER.py)
-  - [Remote](./Software%20Documentation/RC.py)
-  - [Stewart Platform](./Software%20Documentation/Stewart%20Platform/)
-    - [Main](./Software%20Documentation/Stewart%20Platform/main.py)
-    - [Actuation](./Software%20Documentation/Stewart%20Platform/actuation.py)
-
-    - [Translation](./Software%20Documentation/Stewart%20Platform/translator.py)
-    - [Memory](./Software%20Documentation/Stewart%20Platform/memory.py)
+- [On-board Software Documentation](./Firmware%20Documentation/)
+    - [Crane Control Module](./Firmware%20Documentation/Crane%20Control%20Module/)
+    - [Remote Control](./Firmware%20Documentation/Remote%20Control/)
+    - [Onboard Server](./Firmware%20Documentation/Onboard%20Server/)
+    - [Motion Reference Unit](./Firmware%20Documentation/Motion%20Reference%20Unit/)
+    
 - Server / Digital Twin
 - Future Work
   - Smooth Travel Trajectory Planning [(Watch Video)](https://youtube.com/shorts/e3hcZ3Ub7m0?feature=share) <br>Contact **Armin Lyngstad** for quote on implementation
