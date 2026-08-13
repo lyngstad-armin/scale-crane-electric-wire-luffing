@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: micropython-bisect
+Version: 0.5
+Summary: CPython bisect module ported to MicroPython
+Home-page: https://github.com/micropython/micropython/issues/405
+Author: CPython Developers
+Maintainer: MicroPython Developers
+Maintainer-email: micro-python@googlegroups.com
+License: Python
+Dynamic: author
+Dynamic: home-page
+Dynamic: license
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: summary
