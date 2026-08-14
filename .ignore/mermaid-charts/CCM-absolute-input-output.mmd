@@ -7,13 +7,7 @@ flowchart TB
 
 subgraph Absolute I/O
 
-    CCM[CCM PICO]:::style1
-    INPUT[Input]:::style3
-    OUTPUT[Output]:::style2
-
-    X290[" "]
-    style X290 display:none
-
+    subgraph CCM
     USB["USB"]:::style1
     GP0:::style1
     GP1:::style1
@@ -41,17 +35,22 @@ subgraph Absolute I/O
     GP26:::style1
     GP27:::style1
     GP28:::style1
+    end
 
+    subgraph INPUT
     USBI[USB]:::style3
 
     TX[UART TX]:::style3
     RX[UART RX]:::style3
-
     MISO:::style3
     MOSI:::style3
     SCK:::style3
     CS:::style3
-    
+    SDA[SDA]:::style3
+    SCL[SCL]:::style3
+    end
+
+    subgraph OUTPUT
     TXU[UART TX]:::style2
     RXU[UART TX]:::style2
 
@@ -60,30 +59,58 @@ subgraph Absolute I/O
     SCKU[SCK]:::style2
     CSU[CS]:::style2
 
-    PUL1:::style2
-    PUL2:::style2
-    PUL3:::style2
-    PUL4:::style2
-    PUL5:::style2
-    PUL6:::style2
-    PUL7:::style2
-    PUL8:::style2
+    SDAU[SDA]:::style2
+    SCLU[SCL]:::style2
 
-    DIR1:::style2
-    DIR2:::style2
-    DIR3:::style2
-    DIR4:::style2
-    DIR5:::style2
-    DIR6:::style2
-    DIR7:::style2
-    DIR8:::style2
+    JO[Jib Over]
+    JU[Jib Under]
+    S1[Slew 1]
+    S2[Slew 2]
+    Hoist
+    C1[Comp 1]
+    C2[Comp 2]
+    Boom
+    end
 
-INPUT --- CCM --- OUTPUT
-linkStyle 0,1 display:none
-USBI --- USB --- X290
-linkStyle 3 display:none
-TX --- GP0 --- TXU
-RX --- GP1 --- RXU
+
+    CCM[CCM PICO]:::style1
+    INPUT[Input]:::style3
+    OUTPUT[Output]:::style2
 
     
+
+    
+
+ 
+    
+
+
+
+
+
+USBI --- USB
+TX --- GP4 --- TXU
+RX --- GP5 --- RXU
+GP0 --- |PUL| JU
+GP1 --- |DIR| JU
+GP3 --- |PUL| JO
+GP2 --- |DIR| JO
+GP8 --- |PUL| C1
+GP20 --- |DIR| C1
+GP11 --- |PUL| C2
+GP10 --- |DIR| C2
+GP13 --- |PUL| Hoist
+GP12 --- |DIR| Hoist
+GP15 --- |PUL| Boom
+GP14 --- |DIR| Boom
+GP6 --- |PUL| S1
+GP7 --- |DIR| S1
+GP22 --- |PUL| S2
+GP21 --- |DIR| S2
+SDA --- GP26 --- SDAU
+SCL --- GP27 --- SCLU
+SCK --- GP18 --- SCKU
+MISO --- GP16 --- MOSIU
+MOSI --- GP19 --- MISOU
+CS --- GP17 --- CSU
 end

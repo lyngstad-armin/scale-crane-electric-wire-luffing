@@ -118,50 +118,6 @@ linkStyle 12,13,14,15 display:none
 end
 ```
 
-```mermaid
-flowchart LR
-    classDef style2 fill:#2e3c50,stroke:#5b9bd5,color:#fff
-    classDef style1 fill:#5c2525,stroke:#5b9bd5,color:#fff
-    classDef style3 fill:#242b2b,stroke:#5b9bd5,color:#fff  
-subgraph External Connections
-URX0[UART RX]:::style1
-UTX0[UART TX]:::style1
-GN0[GND]:::style1
-V0[3.3V]:::style1
-
-URX1[UART RX]:::style2
-UTX1[UART TX]:::style2
-GN1[GND]:::style2
-V1[3.3V]:::style2
-MISO0[MISO]:::style2
-MOSI0[MOSI]:::style2
-SCK0[SCK]:::style2
-CS0[CS]:::style2
-
-X192[" "]
-style X192 display:none
-
-GN2[GND]:::style3
-V2[3.3V]:::style3
-MOSI1[MOSI]:::style3
-MISO1[MISO]:::style3
-SCK1[SCK]:::style3
-CS1[CS]:::style3
-
-FFG2["CCM PICO"]:::style2 --- FFG3[SPI ANTENNA]:::style3
-URX0 --- URX1 --- X192
-UTX0 --- UTX1 --- X192
-FFG1["MRU PICO"]:::style1 --- FFG2
-linkStyle 0,2,4,5 display:none
-GN0 --- GN1 --- GN2
-V0 --- V1 --- V2
-MOSI0 --- MISO1
-MISO0 --- MOSI1
-CS0 --- CS1
-SCK0 --- SCK1
-
-end
-```
 ## Power Wiring CCM
 
 ```mermaid
@@ -206,13 +162,7 @@ flowchart TB
 
 subgraph Absolute I/O
 
-    CCM[CCM PICO]:::style1
-    INPUT[Input]:::style3
-    OUTPUT[Output]:::style2
-
-    X290[" "]
-    style X290 display:none
-
+    subgraph CCM
     USB["USB"]:::style1
     GP0:::style1
     GP1:::style1
@@ -240,17 +190,22 @@ subgraph Absolute I/O
     GP26:::style1
     GP27:::style1
     GP28:::style1
+    end
 
+    subgraph INPUT
     USBI[USB]:::style3
 
     TX[UART TX]:::style3
     RX[UART RX]:::style3
-
     MISO:::style3
     MOSI:::style3
     SCK:::style3
     CS:::style3
+    SDA[SDA]:::style3
+    SCL[SCL]:::style3
+    end
 
+    subgraph OUTPUT
     TXU[UART TX]:::style2
     RXU[UART TX]:::style2
 
@@ -259,31 +214,59 @@ subgraph Absolute I/O
     SCKU[SCK]:::style2
     CSU[CS]:::style2
 
-    PUL1:::style2
-    PUL2:::style2
-    PUL3:::style2
-    PUL4:::style2
-    PUL5:::style2
-    PUL6:::style2
-    PUL7:::style2
-    PUL8:::style2
+    SDAU[SDA]:::style2
+    SCLU[SCL]:::style2
 
-    DIR1:::style2
-    DIR2:::style2
-    DIR3:::style2
-    DIR4:::style2
-    DIR5:::style2
-    DIR6:::style2
-    DIR7:::style2
-    DIR8:::style2
-
-INPUT --- CCM --- OUTPUT
-linkStyle 0,1 display:none
-USBI --- USB --- X290
-linkStyle 3 display:none
-TX --- GP0 --- TXU
-RX --- GP1 --- RXU
+    JO[Jib Over]:::style2
+    JU[Jib Under]:::style2
+    S1[Slew 1]:::style2
+    S2[Slew 2]:::style2
+    Hoist:::style2
+    C1[Comp 1]:::style2
+    C2[Comp 2]:::style2
+    Boom:::style2
+    end
 
 
+    CCM[CCM PICO]:::style1
+    INPUT[Input]:::style3
+    OUTPUT[Output]:::style2
+
+    
+
+    
+
+ 
+    
+
+
+
+
+
+USBI --- USB
+TX --- GP4 --- TXU
+RX --- GP5 --- RXU
+GP0 --- |PUL| JU
+GP1 --- |DIR| JU
+GP3 --- |PUL| JO
+GP2 --- |DIR| JO
+GP8 --- |PUL| C1
+GP20 --- |DIR| C1
+GP11 --- |PUL| C2
+GP10 --- |DIR| C2
+GP13 --- |PUL| Hoist
+GP12 --- |DIR| Hoist
+GP15 --- |PUL| Boom
+GP14 --- |DIR| Boom
+GP6 --- |PUL| S1
+GP7 --- |DIR| S1
+GP22 --- |PUL| S2
+GP21 --- |DIR| S2
+SDA --- GP26 --- SDAU
+SCL --- GP27 --- SCLU
+SCK --- GP18 --- SCKU
+MISO --- GP16 --- MOSIU
+MOSI --- GP19 --- MISOU
+CS --- GP17 --- CSU
 end
 ```

@@ -3,17 +3,24 @@ from velo import stacy, encoder, link
 from machine import UART, Pin, SPI, WDT
 import struct, time, gc, bisect, umatrix, math
 
-#=========================================CALL CLASSES, DECLARE OBJECTS ======================================
 
-#DECLARE MOTORS (STEP,DIR)
-# jib2 = stacy(8,7)
-# jib1 = stacy(3,2)
-# comp1 = stacy(12,15)
-# comp2 = stacy(28,20)
-# winch = stacy(11,10)
-# boom = stacy(5,21)
-# slew1 = stacy(6,13,RECK=1) 
-# slew2 = stacy(22,14)
+
+
+'''===========================================================================================================
+DECLARE ALL INPUTS AND OUTPUTS
+RELATED TO MOTOR FUNCTION
+
+FOR MOTOR:
+OBJECTNAME = stacy(PUL,DIR)
+
+FOR ENCODER:
+OBJECTNAME = encoder(SDA,SCL,CHANNEL,SAVE ID, FREQUENCY[Hz], AVERAGE OVER X READS)
+
+FOR LINK:
+OBJECTNAME = link(MOTOR,ENCODER)
+'''
+
+#DECLARE MOTOR WIRING
 jib2 = stacy(0,1)
 jib1 = stacy(3,2)
 comp1 = stacy(8,20)
@@ -23,23 +30,26 @@ boom = stacy(15,14)
 slew1 = stacy(6,7,rid=1) #rid = 1 
 slew2 = stacy(22,21)
 
-
 #DECLARE ENCODERS
 time.sleep(0.5)
 Ejib2 = encoder(26,27,ch=5,sid=1,freq=60,mva=1)
 Eboom = encoder(26,27,ch=6,sid=2,freq=60,mva=1)
 Ejib1 = encoder(26,27,ch=7,sid=3,freq=60,mva=1)
-Ecomp = encoder(26,27,ch=3,sid=5,freq=60,mva=1)    #COMP (1160 steps ish)
+Ecomp = encoder(26,27,ch=3,sid=5,freq=60,mva=1)
 Ewinch = encoder(26,27,ch=4,sid=4,freq=60,mva=1)
 
-#Declare JIB2 LINK
+#DECLARE MOTOR LINK
 Ljib2 = link(jib2,Ejib2)
 
-def clear_rx_buffer(uart):
-    uart.read(uart.any())
-#==================================================POSITION/ANGLE READING===============================================
- 
-#READ BOOM ANGLE LISTS FROM CSV TO MEMORY
+'''===========================================================================================================
+LOAD ALL LOOKUP TABLES INTO MEMORY
+ - BOOM ANGLE LOOKUP
+ - RELATIVE BOOM SPEED LOOKUP
+ - JIB ANGLE LOOKUP
+
+'''
+
+#LOAD BOOM LOOKUP TABLE
 boom_pos : list = []
 ang_deg  : list = []
 with open('boom_angle.csv','r') as file:
@@ -49,7 +59,8 @@ with open('boom_angle.csv','r') as file:
             ang_deg.append(int(row[1]))
 del file; del line; del row;
 gc.collect()
-#READ RELATIVE BOOM SPEEDS
+
+#LOAD RELATIVE BOOM SPEED
 jib1_speeds : list = []
 jib2_speeds : list = []
 ang_deg_boom : list = []
@@ -62,47 +73,7 @@ with open('boom_speed.csv','r') as file:
 del file; del line; del row;
 gc.collect()
 
-#BOOM SPEED CALCULATION
-def boom_speed(act_angle,ang_deg_boom,jib1,jib2):
-    if act_angle >= 70:
-        return 0.97,0.79
-    else:
-        idex = bisect.bisect(ang_deg_boom,act_angle)
-        #print(idex)
-        return jib1[idex],jib2[idex]
-
-
-#BOOM ANGLE CALCULATION
-def boom_angle(l,bp,ad):
-    if bp == None:
-        return 0
-    if l >= 4875:
-        return 70
-    idex = bisect.bisect(bp,l)
-    return ad[idex]
-
-def slew_reck():
-    steppos = slew1.getreck()
-    angpos =steppos*360 / (38500)  % 360  //1
-    #print(angpos, steppos, slew1.SPSA)
-    #angpos = 0
-    return round(angpos,1)
-
-#COMP POSITION CALC
-def comp_pos(getpos):
-    pos = round((getpos) * 110/1160,1)
-    if pos >= 110:
-        Ecomp.setpos(1160)
-        pos = 110.0
-    elif pos <= 0:
-        Ecomp.setpos(0)
-        pos = 0.0
-    return pos
-    #front to back
-    #0mm == fully forward
-    #110mm == fully back
-
-#JIB ANGLE
+#JIB ANGLE LOOKUP TABLE
 row = []
 jib_set = []
 with open('jib_angle.csv','r') as f:
@@ -116,6 +87,31 @@ for line in data.split('\r'):
 del f; del row; del line; del data;
 #print(jib_set)
 
+'''===========================================================================================================
+USE LOOKUP TABLES TO CALCULATE
+-BOOM ANGLE
+-RELATIVE BOOM SPEED
+-JIB ANGLE
+'''
+
+#BOOM ANGLE CALCULATION
+def boom_angle(l,bp,ad):
+    if bp == None:
+        return 0
+    if l >= 4875:
+        return 70
+    idex = bisect.bisect(bp,l)
+    return ad[idex]
+
+#BOOM SPEED CALCULATION
+def boom_speed(act_angle,ang_deg_boom,jib1,jib2):
+    if act_angle >= 70:
+        return 0.97,0.79
+    else:
+        idex = bisect.bisect(ang_deg_boom,act_angle)
+        return jib1[idex],jib2[idex]
+
+#JIB ANGLE CALCULATION
 def jib_angle(boom_angle,jib1e,file):
     jib1pos = []
     jib2pos = []
@@ -146,6 +142,14 @@ def jib_angle(boom_angle,jib1e,file):
         idex = 0
     return 132 - idex*2
 
+'''===========================================================================================================
+CALCULATE
+-WIRE POSITION
+-COMPENSATOR POSITION
+-SLEWING DEAD RECKONING
+'''
+
+#WIRE POSITION CALCULATION
 def wlcalc(read):
     if read <= 0:
         read = -read
@@ -173,7 +177,33 @@ def wlcalc(read):
     #Big gear (driven) is 54 tooth
     #Gear ratio is 2.7
 
-#COMP ACTIVATE
+#COMPENSATOR POSITION
+def comp_pos(getpos):
+    pos = round((getpos) * 110/1160,1)
+    if pos >= 110:
+        Ecomp.setpos(1160)
+        pos = 110.0
+    elif pos <= 0:
+        Ecomp.setpos(0)
+        pos = 0.0
+    return pos
+
+    #front to back
+    #0mm == fully forward
+    #110mm == fully back
+
+#SLEWING DEAD RECKONING
+def slew_reck():
+    steppos = slew1.getreck()
+    angpos =steppos*360 / (38500)  % 360  //1
+    return round(angpos,1)
+
+'''===========================================================================================================
+HEAVE COMPENSATION INITIALIZATION AND
+HEAVE COMPENSATION CALCULATION
+'''
+
+#HEAVE COMPENSATION INITIALIZATION
 sequence = [0,0,0]
 count_over = 0
 count_under = 0
@@ -206,8 +236,7 @@ def compensate(heave_save, hsave, sequence):
     hsave = 0
     return hspeed, heave_save, hsave, sequence
 
-
-#==================================================== HEAVE CALCULATION ==============================
+#===== HEAVE CALCULATION ======
 def heave_calc(POS, th1,th2,th3,th4,rolld,hd):
     th4 = -th4
     degrad = math.pi / 180
@@ -263,10 +292,9 @@ def heave_calc(POS, th1,th2,th3,th4,rolld,hd):
     XCDOT3 = ( R1 * R1C + R2 * R2C_2 + R3 * R3C_2 + R4 * R4C_2)
     return float(hd + XCDOT3[2][0])
 
-
-#================================================================= RADIO SETUP =====================================================
-
-
+'''===========================================================================================================
+RADIO SETUP AND CREATE HELPER FUNCTIONS FOR SPI ANTENNA
+'''
 
 #SPI
 spi = SPI(0, baudrate=2_000_000, polarity=0, phase=0,
@@ -329,7 +357,10 @@ version = read_status(0xF1)
 print(hex(partnum))
 print(hex(version))
 
-#================================================ DECLARE DECODE, AND PAIR MOTOR FUNCTIONS ===========================================
+'''===========================================================================================================
+DECLARE DECODING LISTS AND
+DECLARE SKEWED POSITIONAL VECTORS FOR HEAVE COMPENSATION
+'''
 
 #DECLARE PAYLOAD LISTS FOR DECODING
 zero     : list = [0]
@@ -362,6 +393,11 @@ P_JR = umatrix.matrix( [      0,	110.2,	286.4],
 #(0,286.4,-110.2)
 POS = P_PS.transpose, P_SB.transpose, P_BJ.transpose, P_JR.transpose
 del P_PS; del P_SB; del P_BJ; del P_JR
+
+
+'''===========================================================================================================
+DECLARE FUNCTION BLOCKS FOR CRANE OPERATION
+'''
 
 #FUNCTIONS ON
 def SLEW_ON(dr):
@@ -454,7 +490,7 @@ def BOOM_SPD(spd,dr):
     
 def JIB_SPD(spd,dr):
     jib1.speed(spd)
-    #2.5 ish should be dynamic though
+    #2.5 ish should theoretically be dynamic though
     jib2.speed(int(spd*2.5))
     
 def WINCH_SPD(spd,dr):
@@ -462,6 +498,16 @@ def WINCH_SPD(spd,dr):
 
 def SINGLE_JIB_SPD(spd,dr):
     jib2.speed(spd)
+
+'''===========================================================================================================
+CREATE RESLACKING FUNCTION
+RETURNS TO LAST CORRECT LOOKUP POSITION FOR UNDERWIRE ACCORDING TO BOOM ANGLE AND JIB ANGLE
+
+CREATE FUNCTIONALITY FOR ADDING CORRECTION MAPS TO THE RESLACKING FUNCTION
+-Add correction
+-Add correction range
+-Create correction map
+'''
 
 def RESLACK(jib1e,bangle,jib_set,correction):
     jib1pos = []
@@ -520,6 +566,12 @@ def CORRECTION():
     #return list to call
     return correction_map
 
+#Generate correction map for reslack function
+correction_map = CORRECTION() 
+
+'''===========================================================================================================
+UART HELPER FUNCTION FOR MRU
+'''
 
 prev_IMU = [None,None,None,None]
 prev_parts = [0,0,0,0]
@@ -551,11 +603,10 @@ def lesing():
 
     except Exception:
         return prev_parts
-    
-    
-#Generate correction map for reslack function
-correction_map = CORRECTION() 
 
+'''===========================================================================================================
+DICT FOR HANDLING MOTOR COMMANDS
+'''
 
 #DICTS FOR HANDLING MOTOR COMMANDS
 ACTUAL_ON    : list = zerobool*5
@@ -580,7 +631,10 @@ AXIS_MAP_SPD : dict = {     0:SLEW_SPD,
                             9:SINGLE_JIB_SPD,
                                         }
 
-#========================================================= INITIALIZE RADIO TRANSCIEVER =============================
+'''===========================================================================================================
+INITIALIZE RADIO TRANSCIEVER
+CONFIGURE TRANSCIEVER FUNCTION
+'''
 
 
 # CC1101 INITIALIZE
@@ -606,21 +660,18 @@ cs(0); spi.write(bytes([0x3E | 0x40, 0xC0])); cs(1)
 
 
 
-#============================================================ COMPUTING LOOP ===============================================
+'''===========================================================================================================
+FINAL INITALIZATION BEFORE COMPUTING LOOP
+'''
 
-print("Kran er klar")
-flush_and_rx()
-
-# Initialize positions
+#INITIALIZE POSITIONS FOR BROADCAST
 save_boom_pos = boom_angle(-Eboom.getavg(),boom_pos,ang_deg) if Eboom.getavg() is not None else 0
 save_jib_pos  = jib_angle(save_boom_pos,-Ejib1.getavg(),jib_set) if Ejib1.getavg() is not None else 0
 save_slew= slew_reck()
 save_comp=comp_pos(Ecomp.getavg()) if Ecomp.getavg() is not None else 0
 save_wire=wlcalc(Ewinch.getavg()) if Ewinch.getavg() is not None else 0
 
-
-
-
+#DECLARE REFRESH SPEEDS FOR REPEATING FUNCTIONS
 ENCODER_RECENT         : int = 0
 ENCODER_REFRESH        : int = 1800 #ms between refreshes on encoder active code
 PAYLOAD_PACKET_RECENT  : int = 0
@@ -633,13 +684,22 @@ hsave = 0
 heave_on = 0
 del zero; del zerobool;
 
+print("System Initialized")
+flush_and_rx()
 
-
+#CLEAR UART BUFFER
+def clear_rx_buffer(uart):
+    uart.read(uart.any())
 clear_rx_buffer(uart1)
 timing = 0
 
-#Enable when running real
-#wdt = WDT(timeout=5000)
+#Watchdog timer for automatic restart after error code
+#wdt = WDT(timeout=7000)
+
+'''===========================================================================================================
+COMPUTING LOOP
+'''
+
 while True:
     #wdt.feed()
     gc.collect()
@@ -694,26 +754,26 @@ while True:
 
     if rxb != 0:
         
-        #Payload task
+        #PAYLOAD TASK --- DECODE STRUCT PACKET AND RUN MOTORS
         if time.ticks_diff(time.ticks_ms(),PAYLOAD_PACKET_RECENT) >= PAYLOAD_PACKET_REFRESH:
             PAYLOAD_PACKET_RECENT = time.ticks_ms()
             DATA = struct.unpack('BBBBBB', payload)
-            #print(DATA)
-            #Decode payload
+            #DECODE PAYLOAD
             for i in range(len(DATA)-1):
                 DEC_AX[i] = (DATA[i]-128)//64
                 DEC_SPD[i] = (DATA[i]-128)%32 * 100
                 DEC_DIR[i] = ((DATA[i]-128)%64)//32
-            # print(DEC_AX,'\n',DEC_SPD,'\n')
             DEC_SW[1] = DATA[5] // 32      #ID[1] = JIB
             DEC_SW[2] = DATA[5]%32 // 16   #ID[2] = BUTTON
             DEC_SW[3] = DATA[5]%16 // 8    #ID[3] = AUX
             DEC_SW[4] = DATA[5]%8 // 4     #ID[4] = RF
             DEC_SW[5] = DATA[5]%4 // 2     #ID[5] = MODE
             DEC_SW[6] = DATA[5]%2          #ID[6] = WNCH
+
+            #ACTUATE MOTORS
             for i in range(5):
                 g = i
-                #SINGLE JIB TEST
+                #SINGLE JIB EDGE CASE
                 if i == 2 and DEC_SW[1] == 1:
                     g = 9
                     
@@ -781,7 +841,7 @@ while True:
                 #ACTIVE HEAVE CALCULATION
                 if DEC_SW[5] == 1:
                     heave_on = 1
-                                             #V   #Roll                                       #Rolld #Heaved
+                                             #V    #Roll                                                 #Rolld     #Heaved
                     heave_save = heave_calc(POS,float(IMU[0]),save_slew,save_boom_pos,save_jib_pos,float(IMU[3]),float(IMU[2]))
                     
                    
@@ -805,17 +865,11 @@ while True:
                     #RESLACK(Ejib1.getpos(),save_boom_pos,jib_set,correction_map)
                 
     
-    # 3. sender telemetri tilbake
+    #RESPOND TO REMOTE
     send_packet(bytes([status[0], status[1] & 0x7F]) + pakkeSPI)
     
-    # 4. Back to RX 
+    #RETURN TO RX
     flush_and_rx()
-    #loop_tid = time.ticks_diff(time.ticks_ms(), timing)
-    #print(loop_tid)
-    #if loop_tid < 60:
-    #    time.sleep_ms(60-loop_tid)
-    #timing = time.ticks_ms()
-    
     
     
     
