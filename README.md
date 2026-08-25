@@ -8,18 +8,21 @@
 - [CAD Files](./CAD/CAD_catalogue.md)
 - [Assembly Guide & BOM](./Assembly%20Guide/ASSEMBLY.md)
 - [Wiring Schematics](./Wiring%20Schematics/)
+
   - [System](./Wiring%20Schematics/SYSTEM_wiring.md)
   - [MRU & Server](./Wiring%20Schematics/MRU_wiring.md)
   - [Remote Control](./Wiring%20Schematics/RC_wiring.md)
   - [Crane Control Module](./Wiring%20Schematics/CCM_wiring.md)
-
+  
   - [Stewart Platform](./Wiring%20Schematics/PLATFORM_wiring.md)
-- [On-board Software Documentation](./Firmware%20Documentation/)
-    - [Crane Control Module](./Firmware%20Documentation/Crane%20Control%20Module/)
-    - [Remote Control](./Firmware%20Documentation/Remote%20Control/)
-    - [Onboard Server](./Firmware%20Documentation/Onboard%20Server/)
-    - [Motion Reference Unit](./Firmware%20Documentation/Motion%20Reference%20Unit/)
-    
+- [Firmware Documentation](./Firmware%20Documentation/)
+
+  - [Crane Control Module](./Firmware%20Documentation/Crane%20Control%20Module/)     [[main.py]](/Firmware%20Documentation/Crane%20Control%20Module/main.py)
+  - [Remote Control](./Firmware%20Documentation/Remote%20Control/)                   [[main.py]](/Firmware%20Documentation/Remote%20Control/main.py)
+
+  - [Onboard Server](./Firmware%20Documentation/Onboard%20Server/)
+  - [Motion Reference Unit](./Firmware%20Documentation/Motion%20Reference%20Unit/)
+
 - Server / Digital Twin
 - Future Work
   - Smooth Travel Trajectory Planning [(Watch Video)](https://youtube.com/shorts/e3hcZ3Ub7m0?feature=share) <br>Contact **Armin Lyngstad** for quote on implementation

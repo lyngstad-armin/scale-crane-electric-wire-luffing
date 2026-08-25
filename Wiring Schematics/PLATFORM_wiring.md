@@ -144,7 +144,6 @@ GND:::slate
 <br>
 
 ## Platform GPIO Wiring
-*(Note: Please add GPIO numbering)*
 ```mermaid
 %%{init: { 'flowchart': { 'nodeSpacing': 30, 'rankSpacing': 100, 'curve': 'linear' } } }%%
 flowchart LR
@@ -236,18 +235,18 @@ GPX11:::plum
 GPX12:::maroon
 
 %%Name
-GPX1["GP"]
-GPX2["GP"]
-GPX3["GP"]
-GPX4["GP"]
-GPX5["GP"]
-GPX6["GP"]
-GPX7["GP"]
-GPX8["GP"]
-GPX9["GP"]
-GPX10["GP"]
-GPX11["GP"]
-GPX12["GP"]
+GPX1["GP0"]
+GPX2["GP1"]
+GPX3["GP8"]
+GPX4["GP9"]
+GPX5["GP6"]
+GPX6["GP5"]
+GPX7["GP28"]
+GPX8["GP18"]
+GPX9["GP26"]
+GPX10["GP22"]
+GPX11["GP21"]
+GPX12["GP19"]
 ```
 <br>
 <br>
